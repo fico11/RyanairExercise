@@ -1,0 +1,79 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>numberOfThreads</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>1</string>
+              <string>5</string>
+              <string>10</string>
+              <string>20</string>
+              <string>50</string>
+              <string>100</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>rampUp</name>
+          <description></description>
+          <defaultValue>1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>loopCount</name>
+          <description></description>
+          <defaultValue>-1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>duration</name>
+          <description></description>
+          <defaultValue>120</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>hits</name>
+          <description></description>
+          <defaultValue>95</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.BatchFile>
+      <command>del /q T:\Programs\Jmeter\jmeter_scripts\Ryanair\reports\*&#xd;
+for /d %%x in (T:\Programs\Jmeter\jmeter_scripts\Ryanair\reports\*) do @rd /s /q &quot;%%x&quot;&#xd;
+&#xd;
+del /q T:\Programs\Jmeter\jmeter_scripts\Ryanair\results\*&#xd;
+for /d %%x in (T:\Programs\Jmeter\jmeter_scripts\Ryanair\results\*) do @rd /s /q &quot;%%x&quot;&#xd;
+&#xd;
+T:\\Programs\\Jmeter\\apache-jmeter-5.2.1\\bin\\jmeter.bat -n -t T:\\Programs\\Jmeter\\jmeter_scripts\\Ryanair\\Ryanair.jmx -JnumberOfThreads=%numberOfThreads% -JrampUp=%rampUp% -JloopCount=%loopCount% -Jduration=%duration% -Jhits=%hits% -Jbeanshell.server.file=T:\\Programs\\Jmeter\\apache-jmeter-5.2.1\\extras\\startup.bsh -Jjmeterengine.force.system.exit=true -l T:\\Programs\\Jmeter\\jmeter_scripts\\Ryanair\\results\\res.jtl -e -o T:\\Programs\\Jmeter\\jmeter_scripts\\Ryanair\\reports&#xd;
+</command>
+      <configuredLocalRules/>
+    </hudson.tasks.BatchFile>
+    <hudson.tasks.BatchFile>
+      <command>copy T:\Programs\Jmeter\jmeter_scripts\Ryanair\results\* T:\Programs\Jmeter\jmeter_scripts\Ryanair\archieve&#xd;
+&#xd;
+del /f T:\Programs\Jmeter\jmeter_scripts\Ryanair\archieve\res.jtl&#xd;
+</command>
+      <configuredLocalRules/>
+    </hudson.tasks.BatchFile>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
